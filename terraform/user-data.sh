@@ -1,26 +1,19 @@
 #!/bin/bash
+set -eux   # apstājies pie pirmās kļūdas
+
+# 1) Docker instalēšana AL2023
 yum update -y
-yum install -y nginx
-cat >/usr/share/nginx/html/index.html <<"HTML"
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Clock-Server</title>
-  <style>
-    body{font-family:sans-serif;display:flex;align-items:center;
-         justify-content:center;height:100vh;margin:0;
-         background:#111;color:#0f0;font-size:6vw;}
-  </style>
-</head>
-<body>
-  <div id="clock"></div>
-  <script>
-    const el=document.getElementById("clock");
-    function tick(){ el.textContent=new Date().toLocaleTimeString(); }
-    tick(); setInterval(tick,1000);
-  </script>
-</body>
-</html>
-HTML
-systemctl enable --now nginx
+yum install -y docker          # ← pareizi AL2023
+systemctl enable --now docker  # start + auto-start
+
+# 2) Izvēlies publisko attēlu — piemērs ar nginxdemos/hello
+IMG="nginxdemos/hello:latest"  # brīvi vari ielikt citu image
+CTR_PORT=80                    # hello klausās 80
+HOST_PORT=80                   # uz āru lietosim 80
+
+# 3) Palaid konteineru
+docker run -d --name clock \
+  --restart unless-stopped \
+  -p ${HOST_PORT}:${CTR_PORT} \
+  "${IMG}"
+

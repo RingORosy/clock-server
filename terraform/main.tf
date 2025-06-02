@@ -32,12 +32,8 @@ resource "aws_security_group" "clock_sg" {
   }
 }
 
-<<<<<<< HEAD
 # AMI
-=======
-# AMI (Amazon Linux 2023)
 
->>>>>>> 6498e1f516b4305fa8d684bb7a41a2d3d665d5da
 data "aws_ssm_parameter" "al2023" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
@@ -68,9 +64,6 @@ resource "aws_eip" "clock_eip" {
 }
 
 # Output
-<<<<<<< HEAD
-=======
 
->>>>>>> 6498e1f516b4305fa8d684bb7a41a2d3d665d5da
 output "clock_server_ip"  { value = aws_eip.clock_eip.public_ip }
 output "clock_server_url" { value = "http://${aws_eip.clock_eip.public_ip}" }
